@@ -12,32 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace FishStore.UserAuthenticaiton
+namespace FishStore.Manager
 {
     /// <summary>
-    /// Interaction logic for Login.xaml
+    /// Interaction logic for ManagerWindow.xaml
     /// </summary>
-    public partial class Login : Window
+    public partial class ManagerWindow : Window
     {
-        
-        public Login()
+        public ManagerWindow()
         {
             InitializeComponent();
-        }
-
-        private void username_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
-        private void password_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
-        private void btn_Login_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="UserAuthenticaiton\minimal_logo.png" />
+    <None Remove="UserAuthentication\minimal_logo.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,7 +22,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="UserAuthenticaiton\minimal_logo.png" />
+    <Resource Include="UserAuthentication\minimal_logo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

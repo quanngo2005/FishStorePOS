@@ -1,0 +1,104 @@
+﻿<Window x:Class="FishStore.UserAuthenticaiton.Login"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FishStore.UserAuthenticaiton"
+        mc:Ignorable="d"
+        Title="Login" Height="600" Width="900"
+        ResizeMode="NoResize">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Left side image/logo -->
+        <Image x:Name="Sidelog"
+               Grid.Column="0"
+               Source="/UserAuthentication/minimal_logo.png"
+               Stretch="Fill"
+               VerticalAlignment="Stretch"
+               HorizontalAlignment="Stretch"/>
+
+        <!-- Right side login form -->
+        <Grid Grid.Column="1" Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Title -->
+                <RowDefinition Height="40"/>
+                <!-- Spacer -->
+                <RowDefinition Height="Auto"/>
+                <!-- Username label -->
+                <RowDefinition Height="Auto"/>
+                <!-- Username box -->
+                <RowDefinition Height="20"/>
+                <!-- Spacer -->
+                <RowDefinition Height="Auto"/>
+                <!-- Password label -->
+                <RowDefinition Height="Auto"/>
+                <!-- Password box -->
+                <RowDefinition Height="40"/>
+                <!-- Spacer -->
+                <RowDefinition Height="Auto"/>
+                <!-- Buttons -->
+            </Grid.RowDefinitions>
+
+            <!-- Title -->
+            <Label Grid.Row="0"
+                   Content="Login"
+                   FontSize="48"
+                   FontFamily="Comic Sans MS"
+                   HorizontalAlignment="Left"/>
+
+            <!-- Username -->
+            <Label Grid.Row="2"
+                   Content="Username"
+                   FontSize="16"
+                   FontFamily="Comic Sans MS"
+                   HorizontalAlignment="Left"/>
+            <TextBox x:Name="username"
+                     Grid.Row="3"
+                     FontSize="16"
+                     FontFamily="Comic Sans MS"
+                     Height="33"
+                     Width="540"
+                     BorderThickness="1"
+                     VerticalAlignment="Center"
+                     TextChanged="username_TextChanged"/>
+
+            <!-- Password -->
+            <Label Grid.Row="5"
+                   Content="Password"
+                   FontSize="16"
+                   FontFamily="Comic Sans MS"
+                   HorizontalAlignment="Left"/>
+            <PasswordBox x:Name="passwordHash"
+                         Grid.Row="6"
+                         FontSize="16"
+                         FontFamily="Comic Sans MS"
+                         Height="33"
+                         Width="540"
+                         BorderThickness="1"
+                         VerticalAlignment="Center"
+                         PasswordChanged="password_PasswordChanged"/>
+
+            <!-- Bottom buttons -->
+            <StackPanel Grid.Row="8"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="0,20,0,0">
+                
+                <Button x:Name="btn_Login"
+                        Content="Login"
+                        Width="100"
+                        Height="40"
+                        FontSize="16"
+                        FontFamily="Comic Sans MS"
+                        Background="#FFD3B269"
+                        Click="btn_Login_Click"
+                        IsDefault="True"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
