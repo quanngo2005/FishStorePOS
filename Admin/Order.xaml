@@ -1,0 +1,83 @@
+﻿<Window x:Class="FishStore.Admin.Order"
+         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:local="clr-namespace:FishStore.Admin"
+         mc:Ignorable="d"
+         Title="Accounts"
+         Height="700"
+         Width="1000"
+         Background="#FFF8F8F8"
+         FontFamily="Comic Sans MS">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Title -->
+            <RowDefinition Height="Auto"/>
+            <!-- Search -->
+            <RowDefinition Height="Auto"/>
+            <!-- Input Fields -->
+            <RowDefinition Height="*"/>
+            <!-- DataGrid -->
+            <RowDefinition Height="Auto"/>
+            <!-- Buttons -->
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Text="Order Management"
+           FontSize="28"
+           FontWeight="Bold"
+           Foreground="#FF4CAF50"
+           HorizontalAlignment="Center"
+           Margin="0,0,0,20"/>
+
+        <!-- Back Button -->
+        <Button Content="Back to Admin Panel"
+        Click="BackToAdminPanel_Click"
+        HorizontalAlignment="Right"
+        VerticalAlignment="Top"
+        Margin="0,10,10,0"
+        Width="150"
+        Height="30"/>
+
+        <!-- Search Box -->
+        <TextBox x:Name="SearchTextBox"
+         Grid.Row="1"
+         Height="30"
+         FontSize="15"
+         Width="350"
+         HorizontalAlignment="Center"
+         VerticalAlignment="Center"
+         Margin="0,0,0,20"
+         
+         KeyUp="SearchTextBox_KeyUp"
+         TextChanged="SearchTextBox_TextChanged"/>
+        <!-- DataGrid -->
+        <DataGrid x:Name="OrdersDataGrid"
+          Grid.Row="3"
+          AutoGenerateColumns="False"
+          CanUserAddRows="False"
+          CanUserDeleteRows="True"
+          SelectionMode="Single"
+          Margin="0,0,0,20"
+          HeadersVisibility="Column"
+          AlternatingRowBackground="#FFEFEFEF">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="OrderID" Binding="{Binding OrderId}" Width="Auto"/>
+                <DataGridTextColumn Header="CustomerID" Binding="{Binding CustomerId}" Width="*"/>
+                <DataGridTextColumn Header="CreatedBy" Binding="{Binding CreatedBy}" Width="*"/>
+                <DataGridTextColumn Header="Order Date" Binding="{Binding OrderDate}" Width="2*"/>
+                <DataGridTextColumn Header="Total Amount" Binding="{Binding TotalAmount}" Width="*"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="*"/>
+                <DataGridTemplateColumn Header="Action" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Detail" Click="DetailButton_Click" Tag="{Binding OrderId}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

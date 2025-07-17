@@ -48,12 +48,12 @@ public partial class ShopBanCaContext : DbContext
             entity.ToTable("AccessoryTransaction", tb => tb.HasTrigger("trg_AutoID_AccessoryTransaction"));
 
             entity.Property(e => e.TransactionId)
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .HasColumnName("TransactionID");
             entity.Property(e => e.AccessoryId)
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .HasColumnName("AccessoryID");
-            entity.Property(e => e.CreatedBy).HasMaxLength(20);
+            entity.Property(e => e.CreatedBy).HasMaxLength(50);
             entity.Property(e => e.TotalCost)
                 .HasComputedColumnSql("([Quantity]*[UnitCost])", true)
                 .HasColumnType("decimal(21, 2)");
@@ -80,7 +80,7 @@ public partial class ShopBanCaContext : DbContext
             entity.HasIndex(e => e.Username, "UQ__Account__536C85E44E189BD6").IsUnique();
 
             entity.Property(e => e.UserId)
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .HasColumnName("UserID");
             entity.Property(e => e.FullName).HasMaxLength(100);
             entity.Property(e => e.PasswordHash).HasMaxLength(255);
@@ -97,7 +97,7 @@ public partial class ShopBanCaContext : DbContext
             entity.ToTable("AquariumAccessory", tb => tb.HasTrigger("trg_AutoID_Accessory"));
 
             entity.Property(e => e.AccessoryId)
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .HasColumnName("AccessoryID");
             entity.Property(e => e.AccessoryName).HasMaxLength(100);
             entity.Property(e => e.Category).HasMaxLength(50);
@@ -116,7 +116,7 @@ public partial class ShopBanCaContext : DbContext
             entity.ToTable("Category", tb => tb.HasTrigger("trg_AutoID_Category"));
 
             entity.Property(e => e.CategoryId)
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .HasColumnName("CategoryID");
             entity.Property(e => e.CategoryName).HasMaxLength(100);
             entity.Property(e => e.Description).HasMaxLength(255);
@@ -130,7 +130,7 @@ public partial class ShopBanCaContext : DbContext
             entity.ToTable("Customer", tb => tb.HasTrigger("trg_AutoID_Customer"));
 
             entity.Property(e => e.CustomerId)
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .HasColumnName("CustomerID");
             entity.Property(e => e.Address).HasMaxLength(255);
             entity.Property(e => e.Email).HasMaxLength(100);
@@ -146,10 +146,10 @@ public partial class ShopBanCaContext : DbContext
             entity.ToTable(tb => tb.HasTrigger("trg_AutoID_Fish"));
 
             entity.Property(e => e.FishId)
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .HasColumnName("FishID");
             entity.Property(e => e.CategoryId)
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .HasColumnName("CategoryID");
             entity.Property(e => e.Color).HasMaxLength(50);
             entity.Property(e => e.Description).HasMaxLength(255);
@@ -174,11 +174,11 @@ public partial class ShopBanCaContext : DbContext
             entity.ToTable("InventoryTransaction", tb => tb.HasTrigger("trg_AutoID_InventoryTransaction"));
 
             entity.Property(e => e.TransactionId)
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .HasColumnName("TransactionID");
-            entity.Property(e => e.CreatedBy).HasMaxLength(20);
+            entity.Property(e => e.CreatedBy).HasMaxLength(50);
             entity.Property(e => e.FishId)
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .HasColumnName("FishID");
             entity.Property(e => e.TotalCost)
                 .HasComputedColumnSql("([Quantity]*[UnitCost])", true)
@@ -204,11 +204,11 @@ public partial class ShopBanCaContext : DbContext
             entity.ToTable("Order", tb => tb.HasTrigger("trg_AutoID_Order"));
 
             entity.Property(e => e.OrderId)
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .HasColumnName("OrderID");
-            entity.Property(e => e.CreatedBy).HasMaxLength(20);
+            entity.Property(e => e.CreatedBy).HasMaxLength(50);
             entity.Property(e => e.CustomerId)
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .HasColumnName("CustomerID");
             entity.Property(e => e.OrderDate)
                 .HasDefaultValueSql("(getdate())")
@@ -234,13 +234,13 @@ public partial class ShopBanCaContext : DbContext
             entity.ToTable("OrderAccessoryDetail", tb => tb.HasTrigger("trg_AutoID_OrderAccessoryDetail"));
 
             entity.Property(e => e.OrderAccessoryDetailId)
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .HasColumnName("OrderAccessoryDetailID");
             entity.Property(e => e.AccessoryId)
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .HasColumnName("AccessoryID");
             entity.Property(e => e.OrderId)
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .HasColumnName("OrderID");
             entity.Property(e => e.TotalPrice)
                 .HasComputedColumnSql("([Quantity]*[UnitPrice])", true)
@@ -263,13 +263,13 @@ public partial class ShopBanCaContext : DbContext
             entity.ToTable("OrderDetail", tb => tb.HasTrigger("trg_AutoID_OrderDetail"));
 
             entity.Property(e => e.OrderDetailId)
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .HasColumnName("OrderDetailID");
             entity.Property(e => e.FishId)
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .HasColumnName("FishID");
             entity.Property(e => e.OrderId)
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .HasColumnName("OrderID");
             entity.Property(e => e.TotalPrice)
                 .HasComputedColumnSql("([Quantity]*[UnitPrice])", true)

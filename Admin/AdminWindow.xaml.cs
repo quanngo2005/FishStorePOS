@@ -43,7 +43,10 @@ namespace FishStore.Admin
 
         private void CustomerWindow_Click(object sender, RoutedEventArgs e)
         {
-
+            Customer customerWindow = new Customer();
+            Application.Current.MainWindow = customerWindow;
+            customerWindow.Show();
+            this.Close();
         }
 
         private void TransactionWindow_Click(object sender, RoutedEventArgs e)
@@ -53,7 +56,10 @@ namespace FishStore.Admin
 
         private void FishWindow_Click(object sender, RoutedEventArgs e)
         {
-
+            Fishes fishesWindow = new Fishes();
+            Application.Current.MainWindow = fishesWindow;
+            fishesWindow.Show();
+            this.Close();
         }
 
         private void OrderWindow_Click(object sender, RoutedEventArgs e)
@@ -66,6 +72,14 @@ namespace FishStore.Admin
             Login login = new Login();
             Application.Current.MainWindow = login;
             login.Show();
+            this.Close();
+        }
+
+        private void Accessory_Click(object sender, RoutedEventArgs e)
+        {
+            Accessory accessoryWindow = new Accessory();
+            Application.Current.MainWindow = accessoryWindow;
+            accessoryWindow.Show();
             this.Close();
         }
     }

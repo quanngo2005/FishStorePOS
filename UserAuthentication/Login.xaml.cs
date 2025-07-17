@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using FishStore.Helper;
 
 namespace FishStore.UserAuthenticaiton
 {
@@ -81,7 +82,7 @@ namespace FishStore.UserAuthenticaiton
 
                     // Phân quyền theo Role (string)
                     Window mainWindow;
-
+                    
                     switch (account.Role?.Trim().ToLower())
                     {
                         case "admin":
@@ -97,7 +98,8 @@ namespace FishStore.UserAuthenticaiton
                             MessageBox.Show($"Unknown role: {account.Role}", "Access Denied", MessageBoxButton.OK, MessageBoxImage.Warning);
                             return;
                     }
-
+                    Session.UserId= account.UserId; // Lưu ID người dùng vào Session
+                    Session.Role = account.Role; // Lưu Role vào Session
                     Application.Current.MainWindow = mainWindow;
                     mainWindow.Show();
                     this.Close();

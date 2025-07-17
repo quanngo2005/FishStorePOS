@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+
 namespace FishStore.Admin
 {
     /// <summary>
@@ -62,7 +63,7 @@ namespace FishStore.Admin
             
             try
             {
-                var filteredAccounts = db.Categories
+                var filteredCategories = db.Categories
                     .Where(c => searchTerms.All(term =>
                         c.CategoryName.ToLower().Contains(term) ||
                         c.Description.ToLower().Contains(term) ||
@@ -76,7 +77,7 @@ namespace FishStore.Admin
                         Status = c.Status ? "Active" : "Inactive"
                     })
                     .ToList();
-                CategoriesDataGrid.ItemsSource = filteredAccounts;
+                CategoriesDataGrid.ItemsSource = filteredCategories;
             }
             catch (Exception ex)
             {
@@ -118,6 +119,7 @@ namespace FishStore.Admin
             {
                 var newCategory = new Category
                 {
+                    CategoryId = IdGenerator.GenerateId("Category"),
                     CategoryName = categoryName,
                     Description = description,
                     Status = isActive.GetValueOrDefault()
@@ -139,38 +141,41 @@ namespace FishStore.Admin
             var selected = CategoriesDataGrid.SelectedItem;
             if (selected == null)
             {
-                MessageBox.Show("Please select an account to edit.", "No Selection", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-            // Get the categoryId property from the selected item (anonymous type)
-            var IdProperty = selected.GetType().GetProperty("CategoryID");
-            if (IdProperty == null)
-            {
-                MessageBox.Show("Unable to determine selected account.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            string CatetoryID = IdProperty.GetValue(selected)?.ToString();
-            if (string.IsNullOrEmpty(CatetoryID))
-            {
-                MessageBox.Show("Unable to determine selected account.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Please select a category to edit.", "No Selection", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            // Find the account in the database
-            var category = db.Categories.FirstOrDefault(c => c.CategoryId == CatetoryID);
+            // Lấy giá trị CategoryID từ item ẩn danh (anonymous object)
+            var idProperty = selected.GetType().GetProperty("CategoryId");
+            if (idProperty == null)
+            {
+                MessageBox.Show("Unable to determine selected category ID.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            string categoryId = idProperty.GetValue(selected)?.ToString();
+            if (string.IsNullOrWhiteSpace(categoryId))
+            {
+                MessageBox.Show("Selected category ID is invalid.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // Tìm category trong database
+            var category = db.Categories.FirstOrDefault(c => c.CategoryId == categoryId);
             if (category == null)
             {
                 MessageBox.Show("Category not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            // Populate the input fields with the selected account's data
-           
-            NameTextBox.Text = category.CategoryName;
-            DescriptionTextBox.Text = category.Description;
+
+            // Đổ dữ liệu lên form
+            IdTextBox.Text = category.CategoryId;
+            NameTextBox.Text = category.CategoryName ?? string.Empty;
+            DescriptionTextBox.Text = category.Description ?? string.Empty;
             ActiveRadioButton.IsChecked = category.Status;
             InactiveRadioButton.IsChecked = !category.Status;
-
         }
+
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {

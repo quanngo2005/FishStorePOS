@@ -64,7 +64,7 @@
             <Button Content="Transactions" Style="{StaticResource AdminMenuButtonStyle}" Click="TransactionWindow_Click"/>
             <Button Content="Fishes" Style="{StaticResource AdminMenuButtonStyle}" Click="FishWindow_Click"/>
             <Button Content="Orders" Style="{StaticResource AdminMenuButtonStyle}" Click="OrderWindow_Click"/>
-
+            <Button Content="Accessory" Style="{StaticResource AdminMenuButtonStyle}" Click="Accessory_Click"/>
             <Separator Margin="0,20,0,10"/>
             <Button Content="Logout"
                     Style="{StaticResource AdminMenuButtonStyle}"

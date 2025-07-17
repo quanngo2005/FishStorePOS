@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+
 namespace FishStore.Admin
 {
     /// <summary>
@@ -25,7 +26,7 @@ namespace FishStore.Admin
         Account selectedAccount = null;
         public Accounts()
         {
-            InitializeComponent();
+            InitializeComponent();         
             LoadData();
             LoadRole();
         }
@@ -71,7 +72,7 @@ namespace FishStore.Admin
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             string searchText = SearchTextBox.Text.Trim().ToLower();
-            if (string.IsNullOrEmpty(searchText) || searchText.Equals("Search by username or full name..."))
+            if (string.IsNullOrEmpty(searchText))
             {
                 LoadData(); // Reload all data if search text is empty
                 return;
@@ -146,6 +147,7 @@ namespace FishStore.Admin
             }
             var newAccount = new Account
             {
+                UserId = IdGenerator.GenerateId("User"), // Generate a new UserId
                 Username = username,
                 PasswordHash = password, // Consider hashing the password before storing it
                 FullName = fullName,
@@ -163,7 +165,9 @@ namespace FishStore.Admin
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Failed to add account: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Failed to add account: " + ex.Message +
+                    (ex.InnerException != null ? "\nInner: " + ex.InnerException.Message : ""),
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -351,29 +355,7 @@ namespace FishStore.Admin
             ActiveRadioButton.IsChecked = false;
             InactiveRadioButton.IsChecked = false;
         }
-        private void AccountsDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (AccountsDataGrid.SelectedItem is not null)
-            {
-                var selected = AccountsDataGrid.SelectedItem;
-                var userIdProperty = selected.GetType().GetProperty("UserId");
-                if (userIdProperty != null)
-                {
-                    string userId = userIdProperty.GetValue(selected)?.ToString();
-                    selectedAccount = db.Accounts.FirstOrDefault(a => a.UserId == userId);
-                    if (selectedAccount != null)
-                    {
-                        UsernameTextBox.Text = selectedAccount.Username;
-                        PasswordTextBox.Text = selectedAccount.PasswordHash;
-                        FullNameTextBox.Text = selectedAccount.FullName ?? string.Empty;
-                        PhoneTextBox.Text = selectedAccount.PhoneNumber;
-                        RoleComboBox.SelectedItem = selectedAccount.Role;
-                        ActiveRadioButton.IsChecked = selectedAccount.Status;
-                        InactiveRadioButton.IsChecked = !selectedAccount.Status;
-                    }
-                }
-            }
-        }
+        
 
         
     }
