@@ -39,9 +39,9 @@ namespace FishStore.Admin
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             string keyword = SearchTextBox.Text.Trim().ToLower();
-            
+
             var filteredOrders = db.Orders
-                .Where(o => o.CustomerId.ToLower().Contains(keyword) || 
+                .Where(o => o.CreatedBy.ToLower().Contains(keyword) ||
                             o.OrderId.ToString().Contains(keyword) ||
                             o.OrderDate.ToString().Contains(keyword))
                 .ToList();
@@ -53,23 +53,41 @@ namespace FishStore.Admin
                 SearchTextBox_TextChanged(sender, null);
             }
         }
+        private void DetailButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            if (button?.Tag is string orderId && !string.IsNullOrWhiteSpace(orderId))
+            {
+                // Gọi màn hình detail
+                var orderDetailWindow = new OrderDetail();
+                // If you need to pass orderId, set a property or call a method here
+                orderDetailWindow.OrderId = orderId;
+                orderDetailWindow.ShowDialog(); // Hiển thị cửa sổ chi tiết đơn hàng
+            }
+        }
 
         private void BackToAdminPanel_Click(object sender, RoutedEventArgs e)
         {
-            this.Close(); // Đóng cửa sổ hiện tại
+            Window targetWindow = null;
 
-            // Tùy theo role mà mở lại cửa sổ phù hợp
             if (Session.Role == "Admin")
             {
-                NavigationHelper.GoBackTo(new AdminWindow());
+                targetWindow = new AdminWindow();
             }
             else if (Session.Role == "Manager")
             {
-                NavigationHelper.GoBackTo(new ManagerWindow());
+                targetWindow = new ManagerWindow();
             }
             else if (Session.Role == "Staff")
             {
-                NavigationHelper.GoBackTo(new MainWindow());
+                targetWindow = new MainWindow();
+            }
+
+            if (targetWindow != null)
+            {
+                Application.Current.MainWindow = targetWindow;
+                targetWindow.Show();
+                this.Close(); // Đóng cửa sổ hiện tại sau khi mở cửa sổ mới
             }
         }
     }

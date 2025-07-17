@@ -5,8 +5,49 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FishStore.Admin"
         mc:Ignorable="d"
-        Title="OrderDetail" Height="450" Width="800">
-    <Grid>
-        
+        Title="Accounts"
+        Height="700"
+        Width="1000"
+        Background="#FFF8F8F8"
+        FontFamily="Comic Sans MS">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Title -->
+            <RowDefinition Height="Auto"/>
+            <!-- Search -->
+            <RowDefinition Height="Auto"/>
+            <!-- Input Fields -->
+            <RowDefinition Height="*"/>
+            <!-- DataGrid -->
+            <RowDefinition Height="Auto"/>
+            <!-- Buttons -->
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Text="Order Management"
+           FontSize="28"
+           FontWeight="Bold"
+           Foreground="#FF4CAF50"
+           HorizontalAlignment="Center"
+           Margin="0,0,0,20"/>
+        <DataGrid x:Name="OrderItemGrid" Grid.Row="3"
+        AutoGenerateColumns="False"
+        CanUserAddRows="False"
+        CanUserDeleteRows="True"
+        SelectionMode="Single"
+        Margin="0,0,0,20"
+        HeadersVisibility="Column"
+        AlternatingRowBackground="#FFEFEFEF">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Type" Binding="{Binding ItemType}" Width="*" />
+                <DataGridTextColumn Header="Name" Binding="{Binding ItemName}" Width="2*" />
+                <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="*" />
+                <DataGridTextColumn Header="Unit Price" Binding="{Binding UnitPrice}" Width="*" />
+                <DataGridTextColumn Header="Total" Binding="{Binding TotalPrice}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+
     </Grid>
 </Window>

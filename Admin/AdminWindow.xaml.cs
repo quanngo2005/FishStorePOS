@@ -64,7 +64,10 @@ namespace FishStore.Admin
 
         private void OrderWindow_Click(object sender, RoutedEventArgs e)
         {
-
+            Order orderWindow = new Order();
+            Application.Current.MainWindow = orderWindow;
+            orderWindow.Show();
+            this.Close();
         }
 
         private void Logout_Click(object sender, RoutedEventArgs e)

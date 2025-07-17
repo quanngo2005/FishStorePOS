@@ -19,6 +19,22 @@ namespace FishStore.Admin
     /// </summary>
     public partial class OrderDetail : Window
     {
+        private string _orderId;
+        public string OrderId
+        {
+            get { return _orderId; }
+            set
+            {
+                _orderId = value;
+                LoadOrderDetails(_orderId);
+            }
+        }
+
+        private void LoadOrderDetails(string orderId)
+        {
+            MessageBox.Show($"Loading details for Order ID: {orderId} via Property.");
+        }
+
         public OrderDetail()
         {
             InitializeComponent();
