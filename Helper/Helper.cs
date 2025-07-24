@@ -75,8 +75,8 @@ namespace FishStore.Helper
     }
     public static class Session
     {
-        public static string UserId { get; set; }
-        public static string Role { get; set; } // Thêm Role để phân quyền
+        public static string? UserId { get; set; }
+        public static string? Role { get; set; } 
 
     }
     public static class NavigationHelper

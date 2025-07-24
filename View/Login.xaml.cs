@@ -1,6 +1,6 @@
 ﻿using FishStore.Admin;
-using FishStore.Manager;
 using FishStore.Models;
+using FishStore.View;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,7 +92,7 @@ namespace FishStore.UserAuthenticaiton
                             mainWindow = new ManagerWindow(); // tạo ManagerWindow.xaml
                             break;
                         case "staff":
-                            mainWindow = new MainWindow(); // tạo StaffWindow.xaml
+                            mainWindow = new StaffWindow(); // tạo StaffWindow.xaml
                             break;
                         default:
                             MessageBox.Show($"Unknown role: {account.Role}", "Access Denied", MessageBoxButton.OK, MessageBoxImage.Warning);

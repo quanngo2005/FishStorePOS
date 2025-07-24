@@ -13,5 +13,7 @@ public partial class Category
 
     public bool Status { get; set; }
 
+    public virtual ICollection<AquariumAccessory> AquariumAccessories { get; set; } = new List<AquariumAccessory>();
+
     public virtual ICollection<Fish> Fish { get; set; } = new List<Fish>();
 }

@@ -33,7 +33,7 @@
                    Margin="0,0,0,20"/>
 
         <!-- Back Button -->
-        <Button Content="Back to Admin Panel"
+        <Button Content="Back"
                 Click="BackToAdminPanel_Click"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
@@ -125,7 +125,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Accessory ID" Binding="{Binding AccessoryId}" Width="Auto"/>
                 <DataGridTextColumn Header="Name" Binding="{Binding AccessoryName}" Width="*"/>
-                <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="*"/>
+                <DataGridTextColumn Header="Category" Binding="{Binding CategoryName}" Width="*"/>
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="2*"/>
                 <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="*"/>
                 <DataGridTextColumn Header="Quantity" Binding="{Binding QuantityAvailable}" Width="*"/>
@@ -143,9 +143,9 @@
                    ItemHeight="35"
                    ItemWidth="140">
 
-            <Button Content="Add" Click="Add_Click" Margin="5" />
-            <Button Content="Edit" Click="Edit_Click" Margin="5" />
-            <Button Content="Save" Click="Save_Click" Margin="5" />
+            <Button x:Name="Add" Content="Add" Click="Add_Click" Margin="5" />
+            <Button x:Name="Edit" Content="Edit" Click="Edit_Click" Margin="5" />
+            <Button x:Name="Save" Content="Save" Click="Save_Click" Margin="5" />
             <Button Content="Refresh" Click="Refresh_Click" Margin="5" />
             <Button Content="Change Status" Click="ChangeStatus_Click" Margin="5" />
         </WrapPanel>

@@ -1,6 +1,7 @@
 ﻿using FishStore.Helper;
-using FishStore.Manager;
 using FishStore.Models;
+using FishStore.View;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using System;
 using System.Collections.Generic;
@@ -24,15 +25,29 @@ namespace FishStore.Admin
     public partial class Order : Window
     {
         ShopBanCaContext db = new ShopBanCaContext();
+        string role = Session.Role; // Lấy role từ session
         public Order()
         {
             InitializeComponent();
             LoadData();
+            if (role =="Admin")
+            {
+                AddOrderButton.Visibility = Visibility.Visible;
+                DeleteOrderButton.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                AddOrderButton.Visibility = Visibility.Collapsed;
+                DeleteOrderButton.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void LoadData()
         {
-            var orders = db.Orders.ToList();
+            var orders = db.Orders
+            .Include(o => o.Customer)
+            .Include(o => o.CreatedByNavigation)
+            .ToList();
             OrdersDataGrid.ItemsSource = orders;
         }
 
@@ -68,27 +83,19 @@ namespace FishStore.Admin
 
         private void BackToAdminPanel_Click(object sender, RoutedEventArgs e)
         {
-            Window targetWindow = null;
+           
+               this.Close(); // Đóng cửa sổ hiện tại sau khi mở cửa sổ mới
+           
+        }
 
-            if (Session.Role == "Admin")
-            {
-                targetWindow = new AdminWindow();
-            }
-            else if (Session.Role == "Manager")
-            {
-                targetWindow = new ManagerWindow();
-            }
-            else if (Session.Role == "Staff")
-            {
-                targetWindow = new MainWindow();
-            }
+        private void AddOrder_Click(object sender, RoutedEventArgs e)
+        {
 
-            if (targetWindow != null)
-            {
-                Application.Current.MainWindow = targetWindow;
-                targetWindow.Show();
-                this.Close(); // Đóng cửa sổ hiện tại sau khi mở cửa sổ mới
-            }
+        }
+
+        private void DeleteOrder_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

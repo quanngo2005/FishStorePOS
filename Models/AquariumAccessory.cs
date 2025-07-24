@@ -9,7 +9,7 @@ public partial class AquariumAccessory
 
     public string AccessoryName { get; set; } = null!;
 
-    public string? Category { get; set; }
+    public string? CategoryId { get; set; }
 
     public string? Description { get; set; }
 
@@ -22,6 +22,8 @@ public partial class AquariumAccessory
     public bool Status { get; set; }
 
     public virtual ICollection<AccessoryTransaction> AccessoryTransactions { get; set; } = new List<AccessoryTransaction>();
+
+    public virtual Category? Category { get; set; }
 
     public virtual ICollection<OrderAccessoryDetail> OrderAccessoryDetails { get; set; } = new List<OrderAccessoryDetail>();
 }

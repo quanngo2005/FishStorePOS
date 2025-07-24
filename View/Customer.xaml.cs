@@ -284,9 +284,7 @@ namespace FishStore.Admin
 
         private void BackToAdminPanel_Click(object sender, RoutedEventArgs e)
         {
-            AdminWindow adminWindow = new AdminWindow();
-            Application.Current.MainWindow = adminWindow;
-            adminWindow.Show();
+            
             this.Close();
         }
         private void ClearFields_Click(object sender, RoutedEventArgs e)

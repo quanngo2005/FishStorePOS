@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using FishStore.Helper;
 
 
 namespace FishStore.Admin
@@ -25,10 +26,18 @@ namespace FishStore.Admin
     {
         ShopBanCaContext db = new ShopBanCaContext();
         Categories selectedCategory = null;
+        string role = Session.Role; // Lấy role từ Session
         public Categories()
         {
             InitializeComponent();
             LoadData();
+            if (role == "Staff")
+            {
+                Add.Visibility = Visibility.Collapsed;
+                Edit.Visibility = Visibility.Collapsed;
+                Save.Visibility = Visibility.Collapsed;
+                TextBoxes.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void LoadData()
@@ -310,9 +319,7 @@ namespace FishStore.Admin
 
         private void BackToAdminPanel_Click(object sender, RoutedEventArgs e)
         {
-            AdminWindow adminWindow = new AdminWindow();
-            Application.Current.MainWindow = adminWindow;
-            adminWindow.Show();
+            
             this.Close();
         }
     }

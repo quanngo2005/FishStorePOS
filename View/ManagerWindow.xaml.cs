@@ -1,4 +1,6 @@
-﻿using FishStore.UserAuthenticaiton;
+﻿using FishStore.View;
+using FishStore.UserAuthenticaiton;
+using FishStore.Admin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,61 +15,61 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace FishStore.Admin
+namespace FishStore.View
 {
     /// <summary>
-    /// Interaction logic for AdminWindow.xaml
+    /// Interaction logic for ManagerWindow.xaml
     /// </summary>
-    public partial class AdminWindow : Window
+    public partial class ManagerWindow : Window
     {
-        public AdminWindow()
+        public ManagerWindow()
         {
             InitializeComponent();
-        }
-
-        private void AccountWindow_Click(object sender, RoutedEventArgs e)
-        {
-            Accounts accountsWindow = new Accounts();
-            Application.Current.MainWindow = accountsWindow;
-            accountsWindow.Show();
-            this.Close();
         }
 
         private void CategoryWindow_Click(object sender, RoutedEventArgs e)
         {
             Categories categoriesWindow = new Categories();
-            Application.Current.MainWindow = categoriesWindow;
-            categoriesWindow.Show();    
-            this.Close();
+
+            categoriesWindow.Show();
+            this.Hide();
+            categoriesWindow.Closed += (s, arg) => this.Show(); // Hiển thị lại AdminWindow khi Categories đóng
+
         }
 
         private void CustomerWindow_Click(object sender, RoutedEventArgs e)
         {
             Customer customerWindow = new Customer();
-            Application.Current.MainWindow = customerWindow;
+
             customerWindow.Show();
-            this.Close();
+            this.Hide();
+            customerWindow.Closed += (s, arg) => this.Show(); // Hiển thị lại AdminWindow khi Customer đóng
         }
 
         private void TransactionWindow_Click(object sender, RoutedEventArgs e)
         {
-
+            Transaction transactionWindow = new Transaction();
+            transactionWindow.Show();
+            this.Hide();
+            transactionWindow.Closed += (s, arg) => this.Show(); // Hiển thị lại AdminWindow khi Transaction đóng
         }
 
         private void FishWindow_Click(object sender, RoutedEventArgs e)
         {
             Fishes fishesWindow = new Fishes();
-            Application.Current.MainWindow = fishesWindow;
+
             fishesWindow.Show();
-            this.Close();
+            this.Hide();
+            fishesWindow.Closed += (s, arg) => this.Show(); // Hiển thị lại AdminWindow khi Fishes đóng
         }
 
         private void OrderWindow_Click(object sender, RoutedEventArgs e)
         {
             Order orderWindow = new Order();
-            Application.Current.MainWindow = orderWindow;
+
             orderWindow.Show();
-            this.Close();
+            this.Hide();
+            orderWindow.Closed += (s, arg) => this.Show(); // Hiển thị lại AdminWindow khi Order đóng
         }
 
         private void Logout_Click(object sender, RoutedEventArgs e)
@@ -81,9 +83,10 @@ namespace FishStore.Admin
         private void Accessory_Click(object sender, RoutedEventArgs e)
         {
             Accessory accessoryWindow = new Accessory();
-            Application.Current.MainWindow = accessoryWindow;
+
             accessoryWindow.Show();
-            this.Close();
+            this.Hide();
+            accessoryWindow.Closed += (s, arg) => this.Show(); // Hiển thị lại AdminWindow khi Accessory đóng
         }
     }
 }

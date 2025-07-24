@@ -1,6 +1,8 @@
-﻿using FishStore.Models;
+﻿using FishStore.Helper;
+using FishStore.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,17 +24,27 @@ namespace FishStore.Admin
     public partial class Fishes : Window
     {
         ShopBanCaContext db = new ShopBanCaContext();
+        string role = Session.Role; // Lấy role từ Session
         public Fishes()
         {
             InitializeComponent();
             LoadData();
             LoadCategories();
+            if (role == "Staff")
+            {
+                Add.Visibility = Visibility.Collapsed;
+                Edit.Visibility = Visibility.Collapsed;
+                Save.Visibility = Visibility.Collapsed;
+                TextBoxes.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void LoadCategories()
         {
-            var category = db.Fish.Select(f => f.CategoryId).Distinct().ToList();
-            CategoryComboBox.ItemsSource = category;
+            var categories = db.Categories.ToList(); // Lấy full Category
+            CategoryComboBox.ItemsSource = categories;
+            CategoryComboBox.DisplayMemberPath = "CategoryName";        // Hiển thị tên
+            CategoryComboBox.SelectedValuePath = "CategoryId";  // Giá trị là ID
         }
 
         private void LoadData()
@@ -47,10 +59,10 @@ namespace FishStore.Admin
                     f.Species,
                     f.Color,
                     f.Price,
-                    f.CategoryId,
                     f.QuantityAvailable,
                     f.ImageUrl,
                     f.Description,
+                    CategoryName = f.Category.CategoryName, // Lấy tên
                     Status = f.Status ? "Available" : "Unavailable"
                 }).ToList();
                 FishesDataGrid.ItemsSource = fishes;
@@ -63,9 +75,7 @@ namespace FishStore.Admin
 
         private void BackToAdminPanel_Click(object sender, RoutedEventArgs e)
         {
-            AdminWindow adminWindow = new AdminWindow();
-            Application.Current.MainWindow = adminWindow;
-            adminWindow.Show();
+            
             this.Close();
         }
 
@@ -108,7 +118,7 @@ namespace FishStore.Admin
             string fishName = FishNameTextBox.Text.Trim();
             string species = SpeciesTextBox.Text.Trim();
             string color = ColorTextBox.Text.Trim();
-            string size = SizeTextBox.Text.Trim();
+            string size = ((ComboBoxItem)SizeComboBox.SelectedItem)?.Content.ToString();
             string categoryId = CategoryComboBox.SelectedValue?.ToString();
             decimal price = PriceTextBox.Text.Trim() != "" ? decimal.Parse(PriceTextBox.Text.Trim()) : 0;
             int quantityAvailable = QuantityTextBox.Text.Trim() != "" ? int.Parse(QuantityTextBox.Text.Trim()) : 0;
@@ -121,7 +131,7 @@ namespace FishStore.Admin
                 MessageBox.Show("Please fill in all fields correctly.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            if(db.Fish.Any(f => f.FishName.Equals(fishName, StringComparison.OrdinalIgnoreCase)))
+            if (db.Fish.Any(f => f.FishName.ToLower() == fishName.ToLower()))
             {
                 MessageBox.Show("Fish with this name already exists.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
@@ -136,6 +146,7 @@ namespace FishStore.Admin
                 MessageBox.Show("Price must be greater than 0.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
+            
 
             try
             {
@@ -160,7 +171,9 @@ namespace FishStore.Admin
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error adding fish: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                string detailedMessage = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                MessageBox.Show($"Error adding fish: {detailedMessage}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
 
             }
 
@@ -187,26 +200,27 @@ namespace FishStore.Admin
                 MessageBox.Show("Fish not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            fishToEdit.FishId = FishIdTextBox.Text.Trim();
-            fishToEdit.FishName = FishNameTextBox.Text.Trim();
-            fishToEdit.Species = SpeciesTextBox.Text.Trim();
-            fishToEdit.Size = SizeTextBox.Text.Trim();
+            FishIdTextBox.Text = fishToEdit.FishId;
+            FishNameTextBox.Text = fishToEdit.FishName;
+            SpeciesTextBox.Text = fishToEdit.Species;
+            SizeComboBox.SelectedItem = fishToEdit.Size; // hoặc SelectedValue
             CategoryComboBox.SelectedValue = fishToEdit.CategoryId;
-            fishToEdit.Color = ColorTextBox.Text.Trim();
-            fishToEdit.Price = PriceTextBox.Text.Trim() != "" ? decimal.Parse(PriceTextBox.Text.Trim()) : 0;
-            fishToEdit.QuantityAvailable = QuantityTextBox.Text.Trim() != "" ? int.Parse(QuantityTextBox.Text.Trim()) : 0;
-            fishToEdit.ImageUrl = ImageUrlTextBox.Text.Trim();
-            fishToEdit.Description = DescriptionTextBox.Text.Trim();
+            ColorTextBox.Text = fishToEdit.Color;
+            PriceTextBox.Text = fishToEdit.Price.ToString();
+            QuantityTextBox.Text = fishToEdit.QuantityAvailable.ToString();
+            ImageUrlTextBox.Text = fishToEdit.ImageUrl;
+            DescriptionTextBox.Text = fishToEdit.Description;
             ActiveRadioButton.IsChecked = fishToEdit.Status;
             InactiveRadioButton.IsChecked = !fishToEdit.Status;
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
+            
             string fishName = FishNameTextBox.Text.Trim();
             string species = SpeciesTextBox.Text.Trim();
             string color = ColorTextBox.Text.Trim();
-            string size = SizeTextBox.Text.Trim();
+            string size = ((ComboBoxItem)SizeComboBox.SelectedItem)?.Content.ToString();
             string categoryId = CategoryComboBox.SelectedValue?.ToString();
             decimal price = PriceTextBox.Text.Trim() != "" ? decimal.Parse(PriceTextBox.Text.Trim()) : 0;
             int quantityAvailable = QuantityTextBox.Text.Trim() != "" ? int.Parse(QuantityTextBox.Text.Trim()) : 0;
@@ -218,7 +232,7 @@ namespace FishStore.Admin
                 MessageBox.Show("Please fill in all fields correctly.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            if (db.Fish.Any(f => f.FishName.Equals(fishName, StringComparison.OrdinalIgnoreCase)))
+            if (db.Fish.Any(f => f.FishName.ToLower() == fishName.ToLower()))
             {
                 MessageBox.Show("Fish with this name already exists.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
@@ -268,6 +282,7 @@ namespace FishStore.Admin
                 db.SaveChanges();
                 MessageBox.Show("Fish updated successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 LoadData();
+                ClearFields_Click(sender, e);
 
 
             }
@@ -320,7 +335,7 @@ namespace FishStore.Admin
             FishNameTextBox.Text = string.Empty;
             SpeciesTextBox.Text = string.Empty;
             ColorTextBox.Text = string.Empty;
-            SizeTextBox.Text = string.Empty;
+            SizeComboBox.SelectedIndex = -1;
             PriceTextBox.Text = string.Empty;
             CategoryComboBox.SelectedIndex = -1; // Clear selection
             QuantityTextBox.Text = string.Empty;
@@ -330,5 +345,7 @@ namespace FishStore.Admin
             InactiveRadioButton.IsChecked = false;
 
         }
+
+        
     }
 }
