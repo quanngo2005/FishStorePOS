@@ -1,6 +1,10 @@
-﻿using FishStore.View;
+﻿using FishStore.Admin;
+using FishStore.Models;
+using FishStore.Service;
 using FishStore.UserAuthenticaiton;
-using FishStore.Admin;
+using FishStore.View;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +18,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Order = FishStore.Admin.Order;
 
 namespace FishStore.View
 {
@@ -22,9 +27,19 @@ namespace FishStore.View
     /// </summary>
     public partial class ManagerWindow : Window
     {
+        ShopBanCaContext dbContext = new ShopBanCaContext();
         public ManagerWindow()
         {
             InitializeComponent();
+            LoadData();
+        }
+        private void LoadData()
+        {
+
+            var service = new ReportService(dbContext);
+            var reports = service.GetMonthlyReport();
+
+            FishReportDataGrid.ItemsSource = reports;
         }
 
         private void CategoryWindow_Click(object sender, RoutedEventArgs e)
@@ -39,7 +54,7 @@ namespace FishStore.View
 
         private void CustomerWindow_Click(object sender, RoutedEventArgs e)
         {
-            Customer customerWindow = new Customer();
+            Admin.Customer customerWindow = new Admin.Customer();
 
             customerWindow.Show();
             this.Hide();
@@ -87,6 +102,18 @@ namespace FishStore.View
             accessoryWindow.Show();
             this.Hide();
             accessoryWindow.Closed += (s, arg) => this.Show(); // Hiển thị lại AdminWindow khi Accessory đóng
+        }
+
+        private async void AnalyzeButton_Click(object sender, RoutedEventArgs e)
+        {
+            var service = new ReportService(dbContext);
+            var reports = service.GetMonthlyReport(); // Lấy danh sách báo cáo từ dịch vụ
+            string jsonData = JsonConvert.SerializeObject(reports, Formatting.Indented);
+
+            OpenAIService aiService = new OpenAIService();
+            string analysis = await aiService.GetInventoryOptimizationReportAsync(jsonData);
+
+            AnalysisTextBox.Text = analysis;
         }
     }
 }

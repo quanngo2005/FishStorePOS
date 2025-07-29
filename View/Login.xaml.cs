@@ -92,7 +92,7 @@ namespace FishStore.UserAuthenticaiton
                             mainWindow = new ManagerWindow(); // tạo ManagerWindow.xaml
                             break;
                         case "staff":
-                            mainWindow = new StaffWindow(); // tạo StaffWindow.xaml
+                            mainWindow = new OrderMain(); // tạo StaffWindow.xaml
                             break;
                         default:
                             MessageBox.Show($"Unknown role: {account.Role}", "Access Denied", MessageBoxButton.OK, MessageBoxImage.Warning);

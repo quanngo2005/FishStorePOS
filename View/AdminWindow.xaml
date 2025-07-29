@@ -81,17 +81,18 @@
                 BorderThickness="1"
                 Padding="20">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="Reports Area"
-                           FontSize="24"
-                           FontWeight="Bold"
-                           Foreground="#FF888888"
-                           HorizontalAlignment="Center"
-                           Margin="0,0,0,10"/>
-
-                <TextBlock Text="(Static reports will be displayed here)"
-                           FontSize="14"
-                           Foreground="#FFAAAAAA"
-                           HorizontalAlignment="Center"/>
+                <DataGrid x:Name="FishReportDataGrid" AutoGenerateColumns="False" Margin="10">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Year" Binding="{Binding Year}" />
+                        <DataGridTextColumn Header="Month" Binding="{Binding Month}" />
+                        <DataGridTextColumn Header="Fish" Binding="{Binding FishName}" />
+                        <DataGridTextColumn Header="Imported" Binding="{Binding ImportedQuantity}" />
+                        <DataGridTextColumn Header="Sold" Binding="{Binding SoldQuantity}" />
+                        <DataGridTextColumn Header="Revenue" Binding="{Binding TotalRevenue, StringFormat=N0}" />
+                        <DataGridTextColumn Header="Cost" Binding="{Binding TotalCost, StringFormat=N0}" />
+                        <DataGridTextColumn Header="Profit" Binding="{Binding Profit, StringFormat=N0}" />
+                    </DataGrid.Columns>
+                </DataGrid>
             </StackPanel>
         </Border>
     </Grid>

@@ -1,0 +1,119 @@
+﻿<Window x:Class="FishStore.View.OrderMain"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Shop Management" Height="800" Width="1200">
+    <DockPanel LastChildFill="True">
+
+        <!-- ✅ NAVBAR -->
+        <Border DockPanel.Dock="Top" Background="DarkSlateBlue" Height="50">
+            <DockPanel LastChildFill="True">
+
+                <!-- 🐟 Logo bên trái -->
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
+                    <Image Source="/Resource/minimal_logo.png" Height="40" Width="40" Margin="0,0,10,0"/>
+                    <TextBlock Text="Fish Store" Foreground="White" FontSize="16" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- 🔘 Nút bên phải -->
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <Button Content="Data View" Width="100" Margin="5,0" Foreground="White" Background="Transparent" BorderBrush="White" Click="Button_Click_1"/>
+                    <Button Content="Logout" Width="100" Margin="5,0" Foreground="White" Background="Transparent" BorderBrush="White" Click="Button_Click"/>
+                </StackPanel>
+
+            </DockPanel>
+        </Border>
+
+        <!-- ✅ SIDEBAR TRÁI: CATEGORY -->
+        <Border DockPanel.Dock="Left" Width="200" Background="#F0F0F0" BorderBrush="Gray" BorderThickness="0,0,1,0">
+            <StackPanel Margin="10">
+                <TextBlock Text="Categories" FontWeight="Bold" Margin="0 0 0 10"/>
+                <ListBox x:Name="CategoryListBox"
+                DisplayMemberPath="CategoryName"
+                SelectionChanged="CategoryListBox_SelectionChanged"
+                Height="300"/>
+                <Button Content="Clear Fillter" Click="Clear_Click" Margin="10"/>
+            </StackPanel>
+            
+        </Border>
+
+        <!-- ✅ SIDEBAR PHẢI: ORDER -->
+        <!-- BÊN PHẢI: Danh sách sản phẩm đã thêm vào đơn hàng -->
+        <Border DockPanel.Dock="Right" Width="411" Background="#F0F0F0" Padding="10">
+            <StackPanel>
+                <TextBlock Text="Order List" FontSize="18" FontWeight="Bold" Margin="0 0 0 10"/>
+                <ListBox x:Name="OrderListBox" ItemsSource="{Binding orderList}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="Gray" BorderThickness="1" Padding="5" Margin="5">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <TextBlock Text="Qty:" Margin="0 0 5 0"/>
+                                        <Button Content="–" Width="25" Click="DecreaseQuantity_Click"/>
+                                        <TextBlock Text="{Binding Quantity}" Width="30" TextAlignment="Center"/>
+                                        <Button Content="+" Width="25" Click="IncreaseQuantity_Click"/>
+                                        <TextBlock Text="x" Margin="10,0"/>
+                                        <TextBlock Text="{Binding Price, StringFormat='{}{0:N0} ₫'}"/>
+                                        <TextBlock Text="=" Margin="10,0"/>
+                                        <TextBlock Text="{Binding Total, StringFormat='{}{0:N0} ₫'}"/>
+                                        
+                                        <Button Content="🗑 Remove" Click="RemoveItem_Click" Margin="10,0"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <TextBlock x:Name="TotalOrderTextBlock" FontSize="16" FontWeight="Bold" 
+                Foreground="Green" Margin="10" TextAlignment="Right"/>
+                <Button Content="Place Order" Click="PlaceOrder_Click" Margin="0 10 0 0"/>
+            </StackPanel>
+        </Border>
+
+
+
+        <!-- ✅ PHẦN GIỮA: Search + Product Grid -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="10">
+            <StackPanel>
+
+                <!-- 🔍 Search Bar -->
+                <Grid Margin="0 0 0 10">
+                    <TextBox Name="SearchBox" Height="30" TextChanged="SearchBox_TextChanged"/>
+                    <TextBlock Name="PlaceholderTextBlock"
+                               Text="Search products..."
+                               Foreground="Gray"
+                               Margin="5,0,0,0"
+                               VerticalAlignment="Center"
+                               IsHitTestVisible="False"
+                               Visibility="Visible"/>
+                </Grid>
+
+                <!-- 🖼 Product Grid -->
+                <ItemsControl Name="ProductItemsControl">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="8" Margin="5" Width="150">
+                                <StackPanel Margin="10">
+                                    <Image Source="{Binding ImageUrl}" Height="100" Stretch="UniformToFill"/>
+                                    <TextBlock Text="{Binding Name}" TextAlignment="Center" Margin="0,10,0,5"/>
+                                    <TextBlock Text="{Binding Price, StringFormat='{}{0:N0} ₫'}" TextAlignment="Center" Margin="0,0,0,10"/>
+                                    <Button Content="Add" Width="100" HorizontalAlignment="Center" Click="AddToOrder_Click"/>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    
+                </ItemsControl>
+                
+
+            </StackPanel>
+        </ScrollViewer>
+
+    </DockPanel>
+</Window>

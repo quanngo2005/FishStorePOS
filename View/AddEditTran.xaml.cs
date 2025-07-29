@@ -1,5 +1,6 @@
 ﻿using FishStore.Helper;
 using FishStore.Models;
+using FishStore.Service;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -152,141 +153,11 @@ namespace FishStore.View
                 return;
             }
 
-            try
+            var service = new InventoryService(db);
+            if (service.SaveTransaction(_transactionId, selectedType, selectedItem, quantity, unitCost, transactionDate.Value, createdBy, out string errorMsg))
             {
-                // Lấy giá bán để kiểm tra chi phí không vượt quá
-                decimal price = 0;
-                if (selectedType == "Fish")
-                {
-                    price = db.Fish.Where(f => f.FishId == selectedItem).Select(f => f.Price).FirstOrDefault();
-                }
-                else if (selectedType == "Accessory")
-                {
-                    price = db.AquariumAccessories.Where(a => a.AccessoryId == selectedItem).Select(a => a.Price).FirstOrDefault();
-                }
-
-                if (unitCost > price)
-                {
-                    MessageBox.Show("Unit cost cannot be greater than item's price.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-
-                if (selectedType == "Fish")
-                {
-                    InventoryTransaction transaction;
-                    int oldQuantity = 0;
-
-                    if (!string.IsNullOrEmpty(_transactionId))
-                    {
-                        // Chế độ sửa
-                        transaction = db.InventoryTransactions.FirstOrDefault(t => t.TransactionId == _transactionId);
-                        if (transaction == null)
-                        {
-                            MessageBox.Show("Transaction not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                            return;
-                        }
-                        TransactionTypeComboBox.IsEnabled = false;
-                        ItemComboBox.IsHitTestVisible = false;
-                        ItemComboBox.Focusable = false;
-
-
-                        oldQuantity = transaction.Quantity;
-
-                        transaction.FishId = selectedItem;
-                        transaction.Quantity = quantity;
-                        transaction.UnitCost = unitCost;
-                        transaction.TotalCost = quantity * unitCost;
-                        transaction.TransactionDate = transactionDate;
-                    }
-                    else
-                    {
-                        // Chế độ thêm mới
-                        transaction = new InventoryTransaction
-                        {
-                            TransactionId = IdGenerator.GenerateId("InventoryTransaction"),
-                            FishId = selectedItem,
-                            Quantity = quantity,
-                            UnitCost = unitCost,
-                            TotalCost = quantity * unitCost,
-                            CreatedBy = createdBy,
-                            TransactionDate = transactionDate
-                        };
-                        db.InventoryTransactions.Add(transaction);
-                    }
-
-                    var fish = db.Fish.FirstOrDefault(f => f.FishId == selectedItem);
-                    if (fish != null)
-                    {
-                        int quantityDiff = quantity - oldQuantity; // = mới - cũ
-                        fish.QuantityAvailable += quantityDiff;
-
-                        if (fish.QuantityAvailable > 0)
-                        {
-                            fish.Status = true;
-                        }
-                    }
-                }
-                else if (selectedType == "Accessory")
-                {
-                    AccessoryTransaction transaction;
-                    int oldQuantity = 0;
-
-                    if (!string.IsNullOrEmpty(_transactionId))
-                    {
-                        // Chế độ sửa
-                        transaction = db.AccessoryTransactions.FirstOrDefault(t => t.TransactionId == _transactionId);
-                        if (transaction == null)
-                        {
-                            MessageBox.Show("Transaction not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                            return;
-                        }
-                        TransactionTypeComboBox.IsEnabled = false;
-                        ItemComboBox.IsHitTestVisible = false;
-                        ItemComboBox.Focusable = false;
-
-
-                        oldQuantity = transaction.Quantity;
-
-                        transaction.AccessoryId = selectedItem;
-                        transaction.Quantity = quantity;
-                        transaction.UnitCost = unitCost;
-                        transaction.TotalCost = quantity * unitCost;
-                        transaction.TransactionDate = transactionDate;
-                    }
-                    else
-                    {
-                        // Chế độ thêm mới
-                        transaction = new AccessoryTransaction
-                        {
-                            TransactionId = IdGenerator.GenerateId("AccessoryTransaction"),
-                            AccessoryId = selectedItem,
-                            Quantity = quantity,
-                            UnitCost = unitCost,
-                            TotalCost = quantity * unitCost,
-                            CreatedBy = createdBy,
-                            TransactionDate = transactionDate
-                        };
-                        db.AccessoryTransactions.Add(transaction);
-                    }
-
-                    var accessory = db.AquariumAccessories.FirstOrDefault(a => a.AccessoryId == selectedItem);
-                    if (accessory != null)
-                    {
-                        int quantityDiff = quantity - oldQuantity;
-                        accessory.QuantityAvailable += quantityDiff;
-
-                        if (accessory.QuantityAvailable > 0)
-                        {
-                            accessory.Status = true;
-                        }
-                    }
-                }
-
-
-                db.SaveChanges();
                 MessageBox.Show("Transaction saved successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                // Reset form
                 if (string.IsNullOrEmpty(_transactionId))
                 {
                     ItemComboBox.SelectedIndex = -1;
@@ -297,9 +168,9 @@ namespace FishStore.View
 
                 this.Close();
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show("Error saving transaction: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(errorMsg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

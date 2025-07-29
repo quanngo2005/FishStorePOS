@@ -1,5 +1,8 @@
-﻿using FishStore.UserAuthenticaiton;
+﻿using FishStore.Models;
+using FishStore.Service;
+using FishStore.UserAuthenticaiton;
 using FishStore.View;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +24,20 @@ namespace FishStore.Admin
     /// </summary>
     public partial class AdminWindow : Window
     {
+        ShopBanCaContext dbContext = new ShopBanCaContext();
         public AdminWindow()
         {
             InitializeComponent();
+            LoadData(); 
+        }
+        private void LoadData()
+        {
+            
+            var service = new ReportService(dbContext);
+            var reports = service.GetMonthlyReport();
+
+            FishReportDataGrid.ItemsSource = reports;
+
         }
 
         private void AccountWindow_Click(object sender, RoutedEventArgs e)

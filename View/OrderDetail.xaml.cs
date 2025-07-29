@@ -1,6 +1,11 @@
 ﻿using FishStore.Models;
+using PdfSharp.Drawing;
+using PdfSharp.Fonts;
+using PdfSharp.Pdf;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,9 +17,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using PdfSharp.Drawing;
-using PdfSharp.Pdf;
-using System.Diagnostics;
 
 
 namespace FishStore.Admin
@@ -93,9 +95,40 @@ namespace FishStore.Admin
         {
             this.Close();
         }
+        public class CustomFontResolver : IFontResolver
+        {
+            public static readonly CustomFontResolver Instance = new CustomFontResolver();
 
+            public string DefaultFontName => "Arial";
+
+            public byte[] GetFont(string faceName)
+            {
+                // Nạp font theo tên đã định danh (xem phần ResolveTypeface)
+                string fontFile = faceName switch
+                {
+                    "Arial#Regular" => System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resource", "ARIAL.ttf"),
+                    _ => throw new ArgumentException($"Font '{faceName}' không được hỗ trợ.")
+                };
+
+                if (!File.Exists(fontFile))
+                    throw new FileNotFoundException($"Font file not found: {fontFile}");
+
+                return File.ReadAllBytes(fontFile);
+            }
+
+            public FontResolverInfo ResolveTypeface(string familyName, bool isBold, bool isItalic)
+            {
+                if (familyName.Equals("Arial", StringComparison.OrdinalIgnoreCase))
+                {
+                    return new FontResolverInfo("Arial#Regular");
+                }
+
+                return null;
+            }
+        }
         private void ExportButton_Click(object sender, RoutedEventArgs e)
         {
+
 
             string? staffName = db.Orders
             .Where(o => o.OrderId == OrderId)
@@ -104,6 +137,7 @@ namespace FishStore.Admin
                 a => a.UserId,
                 (o, a) => a.FullName)
             .FirstOrDefault();
+            GlobalFontSettings.FontResolver = CustomFontResolver.Instance;
 
             PdfDocument document = new PdfDocument();
             document.Info.Title = $"Hóa đơn {OrderId}";
