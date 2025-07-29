@@ -5,13 +5,15 @@ namespace FishStore.Models;
 
 public partial class Category
 {
-    public int CategoryId { get; set; }
+    public string CategoryId { get; set; } = null!;
 
-    public string Name { get; set; } = null!;
+    public string? CategoryName { get; set; }
 
     public string? Description { get; set; }
 
-    public bool? IsActive { get; set; }
+    public bool Status { get; set; }
 
-    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+    public virtual ICollection<AquariumAccessory> AquariumAccessories { get; set; } = new List<AquariumAccessory>();
+
+    public virtual ICollection<Fish> Fish { get; set; } = new List<Fish>();
 }

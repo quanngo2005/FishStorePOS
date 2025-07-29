@@ -5,21 +5,23 @@ namespace FishStore.Models;
 
 public partial class Order
 {
-    public int OrderId { get; set; }
+    public string OrderId { get; set; } = null!;
 
-    public int? UserId { get; set; }
+    public string? CustomerId { get; set; }
 
-    public decimal TotalAmount { get; set; }
-
-    public string Status { get; set; } = null!;
-
-    public string? ShippingMethod { get; set; }
-
-    public string? TrackingNumber { get; set; }
+    public string? CreatedBy { get; set; }
 
     public DateTime? OrderDate { get; set; }
 
-    public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+    public decimal? TotalAmount { get; set; }
 
-    public virtual User? User { get; set; }
+    public string? Status { get; set; }
+
+    public virtual Account? CreatedByNavigation { get; set; }
+
+    public virtual Customer? Customer { get; set; }
+
+    public virtual ICollection<OrderAccessoryDetail> OrderAccessoryDetails { get; set; } = new List<OrderAccessoryDetail>();
+
+    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 }

@@ -11,14 +11,17 @@ using System.Windows.Shapes;
 
 namespace FishStore
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
+            this.Closed += MainWindow_Closed; // Subscribe to the Closed event
+        }
+
+        private void MainWindow_Closed(object sender, System.EventArgs e)
+        {
+            Application.Current.Shutdown(); // Shut down the application when MainWindow is closed
         }
     }
 }
